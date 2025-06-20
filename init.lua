@@ -1,184 +1,132 @@
-local TweenService = game:GetService("TweenService")
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
+--[=[
+ d888b  db    db d888888b      .d888b.      db      db    db  .d8b.  
+88' Y8b 88    88   `88'        VP  `8D      88      88    88 d8' `8b 
+88      88    88    88            odD'      88      88    88 88ooo88 
+88  ooo 88    88    88          .88'        88      88    88 88~~~88 
+88. ~8~ 88b  d88   .88.        j88.         88booo. 88b  d88 88   88    @uniquadev
+ Y888P  ~Y8888P' Y888888P      888888D      Y88888P ~Y8888P' YP   YP  CONVERTER 
+]=]
 
-local Notification = {}
-Notification.__index = Notification
+-- Instances: 10 | Scripts: 0 | Modules: 0 | Tags: 0
+local G2L = {};
 
-Notification.DefaultConfig = {
-    Duration = 4,
-    Position = UDim2.new(1, -20, 0, 20),
-    Size = UDim2.new(0, 300, 0, 60),
-    BackgroundColor = Color3.fromRGB(20, 20, 20),
-    BackgroundTransparency = 0.2,
-    TextColor = Color3.fromRGB(255, 255, 255),
-    AccentColor = Color3.fromRGB(0, 170, 255),
-    Font = Enum.Font.GothamBold,
-    TitleSize = 16,
-    MessageSize = 14,
-    ParticleConfig = {
-        Enabled = true,
-        Count = 40,
-        MinSize = 1,
-        MaxSize = 3,
-        FadeTime = 1
-    }
-}
+-- StarterGui.ScreenGui
+G2L["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"));
+G2L["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
 
-function Notification.Init(customConfig)
-    local self = setmetatable({}, Notification)
-    self.Config = table.clone(Notification.DefaultConfig)
 
-    if customConfig then
-        for k, v in pairs(customConfig) do
-            self.Config[k] = v
-        end
-    end
+-- StarterGui.ScreenGui.Frame
+G2L["2"] = Instance.new("Frame", G2L["1"]);
+G2L["2"]["BorderSizePixel"] = 0;
+G2L["2"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["2"]["Size"] = UDim2.new(0, 243, 0, 62);
+G2L["2"]["Position"] = UDim2.new(0.29841, 0, 0.30108, 0);
+G2L["2"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 
-    self.ScreenGui = Instance.new("ScreenGui")
-    self.ScreenGui.Name = "NotificationGui"
-    self.ScreenGui.ResetOnSpawn = false
-    self.ScreenGui.DisplayOrder = 10 -- Ensure notifications are always on top
-    self.ScreenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
-    return self
-end
 
-function Notification:ShowNotification(title, message)
-    local gui = Instance.new("Frame")
-    gui.Size = self.Config.Size
-    gui.Position = UDim2.new(1, 20, 0, self.Config.Position.Y.Offset)
-    gui.AnchorPoint = Vector2.new(1, 0)
-    gui.BackgroundColor3 = self.Config.BackgroundColor
-    gui.BackgroundTransparency = self.Config.BackgroundTransparency
-    gui.BorderSizePixel = 0
-    gui.Parent = self.ScreenGui
+-- StarterGui.ScreenGui.Frame.Shadow
+G2L["3"] = Instance.new("UIStroke", G2L["2"]);
+G2L["3"]["Transparency"] = 1;
+G2L["3"]["Name"] = [[Shadow]];
+G2L["3"]["Thickness"] = 1.2;
+G2L["3"]["Color"] = Color3.fromRGB(86, 86, 86);
 
-    local titleLabel = Instance.new("TextLabel")
-    titleLabel.Size = UDim2.new(1, -20, 0, 20)
-    titleLabel.Position = UDim2.new(0, 10, 0, 10)
-    titleLabel.BackgroundTransparency = 1
-    titleLabel.Font = self.Config.Font
-    titleLabel.TextSize = self.Config.TitleSize
-    titleLabel.TextColor3 = self.Config.TextColor
-    titleLabel.Text = title
-    titleLabel.TextXAlignment = Enum.TextXAlignment.Left
-    titleLabel.TextTransparency = 1
-    titleLabel.Parent = gui
 
-    local messageLabel = Instance.new("TextLabel")
-    messageLabel.Size = UDim2.new(1, -20, 1, -35)
-    messageLabel.Position = UDim2.new(0, 10, 0, 30)
-    messageLabel.BackgroundTransparency = 1
-    messageLabel.Font = self.Config.Font
-    messageLabel.TextSize = self.Config.MessageSize
-    messageLabel.TextColor3 = self.Config.TextColor
-    messageLabel.Text = message
-    messageLabel.TextWrapped = true
-    messageLabel.TextXAlignment = Enum.TextXAlignment.Left
-    messageLabel.TextYAlignment = Enum.TextYAlignment.Top
-    messageLabel.TextTransparency = 1
-    messageLabel.Parent = gui
+-- StarterGui.ScreenGui.Frame.Frame
+G2L["4"] = Instance.new("Frame", G2L["2"]);
+G2L["4"]["ZIndex"] = 2;
+G2L["4"]["BorderSizePixel"] = 0;
+G2L["4"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["4"]["AutomaticSize"] = Enum.AutomaticSize.Y;
+G2L["4"]["Size"] = UDim2.new(1, -25, 1, 0);
+G2L["4"]["Position"] = UDim2.new(0, 15, 0, 0);
+G2L["4"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["4"]["BackgroundTransparency"] = 1;
 
-    TweenService:Create(gui, TweenInfo.new(0.4), {
-        Position = self.Config.Position
-    }):Play()
-    TweenService:Create(titleLabel, TweenInfo.new(0.3), { TextTransparency = 0 }):Play()
-    TweenService:Create(messageLabel, TweenInfo.new(0.3), { TextTransparency = 0.2 }):Play()
 
-    task.wait(self.Config.Duration)
+-- StarterGui.ScreenGui.Frame.Frame.UIPadding
+G2L["5"] = Instance.new("UIPadding", G2L["4"]);
+G2L["5"]["PaddingTop"] = UDim.new(0, 16);
+G2L["5"]["PaddingBottom"] = UDim.new(0, 16);
 
-    TweenService:Create(gui, TweenInfo.new(0.3), {
-        Position = UDim2.new(1, 20, 0, self.Config.Position.Y.Offset)
-    }):Play()
-    task.wait(0.3)
-    gui:Destroy()
-end
 
-local Camera = {}
-local notifyInstance = Notification.Init()
+-- StarterGui.ScreenGui.Frame.Frame.Title
+G2L["6"] = Instance.new("TextLabel", G2L["4"]);
+G2L["6"]["TextWrapped"] = true;
+G2L["6"]["ZIndex"] = 2;
+G2L["6"]["BorderSizePixel"] = 0;
+G2L["6"]["TextSize"] = 16;
+G2L["6"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+G2L["6"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["6"]["FontFace"] = Font.new([[rbxassetid://12187365364]], Enum.FontWeight.Bold, Enum.FontStyle.Normal);
+G2L["6"]["TextColor3"] = Color3.fromRGB(41, 41, 41);
+G2L["6"]["BackgroundTransparency"] = 1;
+G2L["6"]["RichText"] = true;
+G2L["6"]["AnchorPoint"] = Vector2.new(0.5, 0);
+G2L["6"]["Size"] = UDim2.new(1, 0, 0, 10);
+G2L["6"]["BorderColor3"] = Color3.fromRGB(28, 43, 54);
+G2L["6"]["Text"] = [[Title]];
+G2L["6"]["AutomaticSize"] = Enum.AutomaticSize.Y;
+G2L["6"]["Name"] = [[Title]];
+G2L["6"]["Position"] = UDim2.new(0.68274, 0, -0.02857, 15);
 
-function Camera:FirstPerson()
-    -- Remove any existing camera scripts
-    local starterGui = game:GetService("StarterGui")
-    for _, child in ipairs(starterGui:GetChildren()) do
-        if child.Name == "FirstPersonLock" or child.Name == "ThirdPersonLock" then
-            child:Destroy()
-        end
-    end
-    
-    -- Create first person script
-    local script = Instance.new("LocalScript")
-    script.Name = "FirstPersonLock"
-    
-    -- First person camera script content
-    script.Source = [[
-        local Players = game:GetService("Players")
-        local RunService = game:GetService("RunService")
-        
-        local player = Players.LocalPlayer
-        local character = player.Character or player.CharacterAdded:Wait()
-        
-        -- Wait for humanoid
-        local humanoid = character:WaitForChild("Humanoid")
-        
-        -- Set camera type to scriptable
-        workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
-        
-        -- Camera follow function
-        local function updateCamera()
-            if character and character:FindFirstChild("Head") then
-                workspace.CurrentCamera.CFrame = character.Head.CFrame
-            end
-        end
-        
-        -- Connect to render stepped
-        RunService:BindToRenderStep("FirstPersonCamera", Enum.RenderPriority.Camera.Value, updateCamera)
-        
-        -- Cleanup when character is removed
-        player.CharacterRemoving:Connect(function()
-            RunService:UnbindFromRenderStep("FirstPersonCamera")
-        end)
-    ]]
-    
-    script.Parent = starterGui
-    notifyInstance:ShowNotification("Camera Mode", "Switched to First Person")
-end
 
-function Camera:ThirdPerson()
-    -- Remove any existing camera scripts
-    local starterGui = game:GetService("StarterGui")
-    for _, child in ipairs(starterGui:GetChildren()) do
-        if child.Name == "FirstPersonLock" or child.Name == "ThirdPersonLock" then
-            child:Destroy()
-        end
-    end
-    
-    -- Create third person script
-    local script = Instance.new("LocalScript")
-    script.Name = "ThirdPersonLock"
-    
-    -- Third person camera script content
-    script.Source = [[
-        local Players = game:GetService("Players")
-        
-        local player = Players.LocalPlayer
-        local character = player.Character or player.CharacterAdded:Wait()
-        
-        -- Wait for humanoid
-        local humanoid = character:WaitForChild("Humanoid")
-        
-        -- Reset camera to default
-        workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
-        
-        -- Set camera subject to character
-        workspace.CurrentCamera.CameraSubject = humanoid
-    ]]
-    
-    script.Parent = starterGui
-    notifyInstance:ShowNotification("Camera Mode", "Switched to Third Person")
-end
+-- StarterGui.ScreenGui.Frame.Frame.Description
+G2L["7"] = Instance.new("TextLabel", G2L["4"]);
+G2L["7"]["TextWrapped"] = true;
+G2L["7"]["ZIndex"] = 2;
+G2L["7"]["BorderSizePixel"] = 0;
+G2L["7"]["TextSize"] = 14;
+G2L["7"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+G2L["7"]["TextTransparency"] = 0.15;
+G2L["7"]["TextYAlignment"] = Enum.TextYAlignment.Top;
+G2L["7"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["7"]["FontFace"] = Font.new([[rbxassetid://12187365364]], Enum.FontWeight.Medium, Enum.FontStyle.Normal);
+G2L["7"]["TextColor3"] = Color3.fromRGB(121, 121, 121);
+G2L["7"]["BackgroundTransparency"] = 1;
+G2L["7"]["RichText"] = true;
+G2L["7"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["7"]["Size"] = UDim2.new(1, 0, 0, 5);
+G2L["7"]["BorderColor3"] = Color3.fromRGB(28, 43, 54);
+G2L["7"]["Text"] = [[Description]];
+G2L["7"]["AutomaticSize"] = Enum.AutomaticSize.Y;
+G2L["7"]["Name"] = [[Description]];
+G2L["7"]["Position"] = UDim2.new(0.556, 0, 0.5, 7);
 
-return {
-    Camera = Camera,
-    Notification = notifyInstance
-}
+
+-- StarterGui.ScreenGui.Frame.Frame.UIListLayout
+G2L["8"] = Instance.new("UIListLayout", G2L["4"]);
+G2L["8"]["VerticalAlignment"] = Enum.VerticalAlignment.Center;
+G2L["8"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
+
+
+-- StarterGui.ScreenGui.Frame.Timer
+G2L["9"] = Instance.new("Frame", G2L["2"]);
+G2L["9"]["ZIndex"] = 2;
+G2L["9"]["BorderSizePixel"] = 0;
+G2L["9"]["BackgroundColor3"] = Color3.fromRGB(111, 159, 247);
+G2L["9"]["Size"] = UDim2.new(1, 0, 0, 2);
+G2L["9"]["Position"] = UDim2.new(0, 0, 1, -2);
+G2L["9"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["9"]["Name"] = [[Timer]];
+
+
+-- StarterGui.ScreenGui.Frame.Interact
+G2L["a"] = Instance.new("TextButton", G2L["2"]);
+G2L["a"]["BorderSizePixel"] = 0;
+G2L["a"]["TextSize"] = 14;
+G2L["a"]["TextColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["a"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["a"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["a"]["ZIndex"] = 5;
+G2L["a"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["a"]["BackgroundTransparency"] = 1;
+G2L["a"]["Size"] = UDim2.new(1, 0, 1, 0);
+G2L["a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["a"]["Text"] = [[]];
+G2L["a"]["Name"] = [[Interact]];
+G2L["a"]["Position"] = UDim2.new(0.5, 0, 0.5, 0);
+
+
+
+return G2L["1"], require;

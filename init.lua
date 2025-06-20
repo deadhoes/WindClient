@@ -38,6 +38,7 @@ function Notification.Init(customConfig)
     self.ScreenGui = Instance.new("ScreenGui")
     self.ScreenGui.Name = "NotificationGui"
     self.ScreenGui.ResetOnSpawn = false
+    self.ScreenGui.DisplayOrder = 10 -- Ensure notifications are always on top
     self.ScreenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
     return self
 end
@@ -97,18 +98,83 @@ local Camera = {}
 local notifyInstance = Notification.Init()
 
 function Camera:FirstPerson()
-    local camScript = script:FindFirstChild("FirstPersonLock")
-    if camScript then
-        camScript:Clone().Parent = game:GetService("StarterGui")
+    -- Remove any existing camera scripts
+    local starterGui = game:GetService("StarterGui")
+    for _, child in ipairs(starterGui:GetChildren()) do
+        if child.Name == "FirstPersonLock" or child.Name == "ThirdPersonLock" then
+            child:Destroy()
+        end
     end
+    
+    -- Create first person script
+    local script = Instance.new("LocalScript")
+    script.Name = "FirstPersonLock"
+    
+    -- First person camera script content
+    script.Source = [[
+        local Players = game:GetService("Players")
+        local RunService = game:GetService("RunService")
+        
+        local player = Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        
+        -- Wait for humanoid
+        local humanoid = character:WaitForChild("Humanoid")
+        
+        -- Set camera type to scriptable
+        workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
+        
+        -- Camera follow function
+        local function updateCamera()
+            if character and character:FindFirstChild("Head") then
+                workspace.CurrentCamera.CFrame = character.Head.CFrame
+            end
+        end
+        
+        -- Connect to render stepped
+        RunService:BindToRenderStep("FirstPersonCamera", Enum.RenderPriority.Camera.Value, updateCamera)
+        
+        -- Cleanup when character is removed
+        player.CharacterRemoving:Connect(function()
+            RunService:UnbindFromRenderStep("FirstPersonCamera")
+        end)
+    ]]
+    
+    script.Parent = starterGui
     notifyInstance:ShowNotification("Camera Mode", "Switched to First Person")
 end
 
 function Camera:ThirdPerson()
-    local camScript = script:FindFirstChild("ThirdPersonLock")
-    if camScript then
-        camScript:Clone().Parent = game:GetService("StarterGui")
+    -- Remove any existing camera scripts
+    local starterGui = game:GetService("StarterGui")
+    for _, child in ipairs(starterGui:GetChildren()) do
+        if child.Name == "FirstPersonLock" or child.Name == "ThirdPersonLock" then
+            child:Destroy()
+        end
     end
+    
+    -- Create third person script
+    local script = Instance.new("LocalScript")
+    script.Name = "ThirdPersonLock"
+    
+    -- Third person camera script content
+    script.Source = [[
+        local Players = game:GetService("Players")
+        
+        local player = Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        
+        -- Wait for humanoid
+        local humanoid = character:WaitForChild("Humanoid")
+        
+        -- Reset camera to default
+        workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
+        
+        -- Set camera subject to character
+        workspace.CurrentCamera.CameraSubject = humanoid
+    ]]
+    
+    script.Parent = starterGui
     notifyInstance:ShowNotification("Camera Mode", "Switched to Third Person")
 end
 
